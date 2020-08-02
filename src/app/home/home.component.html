@@ -3,16 +3,16 @@
     <div class="row">
         <h2>Create A Subscription</h2>    
         
-            <form (submit)="test()">
+            <form [formGroup]="invoiceForm" (submit)="displayInvoice()">
                 <mat-form-field appearance="fill">
                     <mat-label>Amount</mat-label>
-                    <input matInput>
+                    <input matInput formControlName="amount">
                 </mat-form-field>
                 <br>   
 
                 <mat-form-field appearance="fill">
                     <mat-label>Subscription Type</mat-label>
-                    <mat-select>
+                    <mat-select formControlName="type">
                       <mat-option value="daily">Daily</mat-option>
                       <mat-option value="weekly">Weekly</mat-option>
                       <mat-option value="monthly">Monthly</mat-option>
@@ -20,11 +20,51 @@
                 </mat-form-field>
                 <br>
 
+                <mat-form-field appearance="fill" *ngIf="invoiceForm.value.type == 'weekly'">
+                    <mat-label>Choose the day of the week</mat-label>
+                    <mat-select formControlName="weekDate">
+                        <mat-option *ngFor="let day of days" [value]="day.value">
+                            {{day.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br *ngIf="invoiceForm.value.type == 'weekly'">
+
+                <mat-form-field appearance="fill" *ngIf="invoiceForm.value.type == 'monthly'">
+                    <mat-label>Choose the date of the month</mat-label>
+                    <mat-select formControlName="monthDate">
+                        <mat-option *ngFor="let i of numDates" [value]="i">
+                            {{i}}
+                        </mat-option>
+                    </mat-select><br>
+                </mat-form-field>
+                <br *ngIf="invoiceForm.value.type == 'monthly'">
+                
+                <mat-form-field appearance="fill">
+                    <mat-label>Subscription Terms (max 3 months)</mat-label>
+                    <input
+                        matInput
+                        ngxDaterangepickerMd
+                        showCancel="true"
+                        [dateLimit]="dateLimit" [minDate]='minDate'
+                        [showDropdowns]="true"
+                        [locale]="{displayFormat: 'DD/MM/YYYY'}"
+                        formControlName="terms"
+                        (change)="change($event)"
+                    />
+                </mat-form-field>
+
 
                 <br>
                 <button mat-flat-button color="accent">Create</button>
-            </form>
-            
+            </form>    
+    </div><br>
+
+    <div class="row">
+        <h2>SUBSCRIPTION INVOICE</h2>
+        <p>Amount Charge {{invoiceForm.value.type}}: {{invoiceForm.value.amount}}</p>
+        <p>Your subscription will be charged on below dates:</p>
+        <span *ngFor="let dates of invoiceDates">"{{dates}}" </span>
     </div>
 
    
