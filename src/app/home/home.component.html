@@ -1,0 +1,34 @@
+<div class="main-layout">
+
+    <div class="row">
+        <h2>Create A Subscription</h2>    
+        
+            <form (submit)="test()">
+                <mat-form-field appearance="fill">
+                    <mat-label>Amount</mat-label>
+                    <input matInput>
+                </mat-form-field>
+                <br>   
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Subscription Type</mat-label>
+                    <mat-select>
+                      <mat-option value="daily">Daily</mat-option>
+                      <mat-option value="weekly">Weekly</mat-option>
+                      <mat-option value="monthly">Monthly</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br>
+
+
+                <br>
+                <button mat-flat-button color="accent">Create</button>
+            </form>
+            
+    </div>
+
+   
+</div>
+
+
+
