@@ -11,6 +11,7 @@ import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
   templateUrl: './home.component.html',
   styleUrls: ['../app.component.css','./home.component.css']
 })
+
 export class HomeComponent implements OnInit {
 
   invoiceForm = this.fb.group({
@@ -39,11 +40,6 @@ export class HomeComponent implements OnInit {
       {value: 7, name: 'Sunday'}]
 
     numDates = [];  
-
-    change(e): void {
-      console.log(e);
-    }
-
 
     generate(terms, type, weekDate, monthDate): void {
 
@@ -74,25 +70,19 @@ export class HomeComponent implements OnInit {
       else if (type=='monthly'){
         this.invoiceDates = [];
 
-        var tempDate = terms.startDate.clone();
+        let tempDate = terms.startDate.clone();
 
-        while (terms.endDate > tempDate || tempDate.format('M') === terms.endDate.format('M')) {
-          this.invoiceDates.push(tempDate.format('DD/MM/YYYY'));
+        while (tempDate.isBefore(terms.endDate)) {
+          this.invoiceDates.push(tempDate.format(monthDate+'/MM/YYYY'));
           tempDate.add(1,'month');
         }
       }
-
-      
-
-      console.log(this.invoiceDates);
-        
+ 
     }
     
 
-  
-
   constructor(private fb: FormBuilder) { 
-    this.numDates = Array.from({length:30},(v,k)=>k+1);
+    this.numDates = Array.from({length:30},(v,k)=>(k+1).toLocaleString(undefined, {minimumIntegerDigits: 2}));
   }
 
   ngOnInit(): void {
@@ -100,7 +90,6 @@ export class HomeComponent implements OnInit {
 
 
   displayInvoice(){
-    console.log(this.invoiceForm.value.monthDate)
     this.generate(this.invoiceForm.value.terms, this.invoiceForm.value.type, this.invoiceForm.value.weekDate, this.invoiceForm.value.monthDate)
   }
 
